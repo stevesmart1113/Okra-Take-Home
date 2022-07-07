@@ -6,13 +6,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  userId       String?   @default(uuid())
+  id           Bytes @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String?  @default(uuid())
   firstName    String?
   lastName     String?
   email        String?
@@ -24,21 +24,43 @@ model User {
 }
 
 model Customer {
-  id                  Int                   @id @default(autoincrement())
-  customerId          String?                @default(uuid())
+  id                  Bytes @id @default(auto()) @map("_id") @db.ObjectId
+  customerId          String?               @default(uuid())
   firstName           String?
   lastName            String?
   email               String?
+  phone               String?
   password            String?
-  customerGeoLocation CustomerGeoLocation[]
+  avatarUrl           String?
+  country             String?
   active              Boolean               @default(true)
   dateCreated         DateTime              @default(now())
   dateUpdated         DateTime              @updatedAt
 }
 
-model CustomerGeoLocation {
-  id       Int      @id @default(autoincrement())
-  location String?
-  user     Customer @relation(fields: [customerId], references: [id])
-  customerId   Int
+
+model Identity {
+  id             Bytes @id @default(auto()) @map("_id") @db.ObjectId
+  firstName      String?
+  middleName     String?
+  lastName       String?
+  aliases        String?
+  dob            String?
+  address        String? //
+  gender         String?
+  photoId        String?
+  enrollmentDate String?
+  enrollmentBank String? //
+  phones         String? //
+  emails         String? //
+  fullName       String?
+  bvn            String?
+  customer       String? // generated customer id from Part 3
+  identity       String? // generated identity id from Part 3
+  nin            String?
+  lgaOrigin      String?
+  lgaResidence   String?
+  nationality    String?
+  stateResidence String?
+  stateOrigin    String?
 }

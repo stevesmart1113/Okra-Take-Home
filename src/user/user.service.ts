@@ -37,4 +37,19 @@ export class UserService {
   remove(id: number) {
     return this.ps.user.delete({where: {id: id}});
   }
+
+  findUserByEmail(email: string) {
+     return this.ps.user.findFirst({where: {email: email}})
+  }
+
+  async searchForMatchingCredentials(email: string, password: string) {
+    return this.ps.user.findFirst(
+      {
+        where: {
+          email: email,
+          password: password
+        }
+      }
+    )
+  }
 }
